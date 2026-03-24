@@ -3,13 +3,14 @@
 name: axios-pay
 region: fra
 services:
-  - name: axios-pay-backend
+  - name: axios-pay-engine
     github:
       branch: main
       repo: dukemawex/axios-pay
       deploy_on_push: true
     source_dir: /
-    dockerfile_path: Dockerfile
+    build_command: "cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build"
+    run_command: "cd backend && npx prisma db push --accept-data-loss && node dist/server.js"
     envs:
       - key: DATABASE_URL
         scope: RUN_AND_BUILD_TIME
@@ -32,26 +33,6 @@ services:
     http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs
-    # Changed to 'db push' so it auto-updates the schema on DO without needing local migration files
-    run_command: npx prisma db push --accept-data-loss && npm run start
-    routes:
-      - path: /api
-
-static_sites:
-  - name: axios-pay-frontend
-    github:
-      branch: main
-      repo: dukemawex/axios-pay
-      deploy_on_push: true
-    source_dir: frontend
-    build_command: npm install && npm run build
-    output_dir: dist
-    index_document: index.html
-    error_document: index.html
-    envs:
-      - key: VITE_API_BASE_URL
-        scope: BUILD_TIME
-        value: ${axios-pay-backend.PUBLIC_URL}/api
     routes:
       - path: /
 

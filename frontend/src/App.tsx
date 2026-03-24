@@ -34,7 +34,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-gray-900 antialiased">
+    <div className="min-h-screen bg-[#FDFDFD] text-[#1A1A1A] antialiased">
       <nav className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => token ? setView('dashboard') : setView('login')}>
           <div className="w-7 h-7 bg-emerald-500 rounded flex items-center justify-center">
@@ -64,7 +64,7 @@ export default function App() {
                 {view === 'login' ? 'Welcome back' : 'Create your account'}
               </h1>
               <p className="text-gray-500 text-sm">
-                Professional cross-border liquidity for the African market.
+                Multi-currency liquidity across African markets.
               </p>
             </div>
 
@@ -79,7 +79,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-gray-200 py-4 px-6 text-center text-[10px] uppercase tracking-widest text-gray-400 font-bold">
-        Built by Emmanuel Duke & Fortitude Odunlami · Enyata × Interswitch Buildathon
+        Built by Emmanuel Duke &amp; Fortitude Odunlami for the Enyata × Interswitch Buildathon
       </footer>
     </div>
   );
@@ -231,7 +231,7 @@ function Dashboard({ token, user, onLogout }: { token: string; user: { id: strin
         </div>
 
         <p className="text-gray-500 text-sm mb-6">
-          All cross-border liquidity routes are encrypted and active.
+          Multi-currency liquidity across African markets — NGN, UGX, GHS, KES, ZAR.
         </p>
 
         <button

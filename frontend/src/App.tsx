@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRightLeft, ShieldCheck, Globe, Loader2, ChevronRight, Eye, EyeOff, LogOut } from 'lucide-react';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') || '';
 
 type View = 'login' | 'register' | 'dashboard';
 

@@ -10,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 const corsOrigins: string[] = process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : [];
+corsOrigins.push('https://axios-pay.vercel.app');
 if (process.env.NODE_ENV !== 'production') {
     corsOrigins.push('http://localhost:3000');
 }

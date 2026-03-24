@@ -22,20 +22,28 @@ const corsOptions: CorsOptions = {
             return callback(null, true);
         }
 
-        const isAllowedOrigin = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+        let isVercelOrigin = false;
+        try {
+            const parsedOrigin = new URL(origin);
+            isVercelOrigin = parsedOrigin.protocol === 'https:' && parsedOrigin.hostname.endsWith('.vercel.app');
+        } catch (_error) {
+            isVercelOrigin = false;
+        }
+
+        const isAllowedOrigin = allowedOrigins.includes(origin) || isVercelOrigin;
 
         if (isAllowedOrigin) {
             return callback(null, true);
         }
 
-        return callback(new Error('Not allowed by CORS'));
+        return callback(null, false);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(helmet());
 

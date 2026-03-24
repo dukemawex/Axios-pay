@@ -1,0 +1,52 @@
+name: axios-pay
+region: fra
+services:
+  - name: axios-pay-backend
+    github:
+      branch: main
+      repo: your-github-username/axios-pay
+      deploy_on_push: true
+    source_dir: /
+    dockerfile_path: Dockerfile
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${axios-pay-db.DATABASE_URL}
+      - key: INTERSWITCH_CLIENT_ID
+        scope: RUN_AND_BUILD_TIME
+        value: ""
+      - key: INTERSWITCH_SECRET
+        scope: RUN_AND_BUILD_TIME
+        value: ""
+      - key: INTERSWITCH_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: "sandbox"
+      - key: PORT
+        scope: RUN_AND_BUILD_TIME
+        value: "8080"
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    run_command: npx prisma migrate deploy && npm run start
+
+static_sites:
+  - name: axios-pay-frontend
+    github:
+      branch: main
+      repo: your-github-username/axios-pay
+      deploy_on_push: true
+    source_dir: frontend
+    build_command: npm install && npm run build
+    output_dir: dist
+    envs:
+      - key: VITE_API_BASE_URL
+        scope: BUILD_TIME
+        value: ${axios-pay-backend.PUBLIC_URL}/api
+
+databases:
+  - name: axios-pay-db
+    engine: PG
+    version: "15"
+    db_name: defaultdb
+    db_user: doadmin
+    cluster_name: axios-pay-db-cluster

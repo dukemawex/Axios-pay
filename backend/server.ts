@@ -69,12 +69,16 @@ app.get('/health', (_req: Request, res: Response) => {
     res.status(200).json({ status: 'OK', service: 'Axios Pay Production Engine' });
 });
 
-app.get('/', staticLimiter, (_req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
-});
-
 // Serve frontend static files (built by Vite)
 app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
+app.get('/', staticLimiter, (_req: Request, res: Response, next: NextFunction) => {
+    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'), (err) => {
+        if (err) {
+            next(err);
+        }
+    });
+});
 
 // Catch-all: serve index.html for all non-API paths (SPA client-side routing)
 app.get('*', staticLimiter, (_req: Request, res: Response) => {

@@ -9,9 +9,13 @@ import authRoutes from './routes/auth';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(helmet());
-app.use(cors({ origin: '*' })); 
 app.use(express.json());
+app.use(helmet());
+app.use(cors({
+    origin: ['https://axios-pay-ss47w.ondigitalocean.app', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);

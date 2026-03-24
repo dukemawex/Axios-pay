@@ -4,7 +4,7 @@
   "description": "Axios Pay Monolithic Backend Engine",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "npx prisma db push && node dist/server.js",
     "dev": "ts-node server.ts",
     "build": "tsc",
     "postinstall": "prisma generate"

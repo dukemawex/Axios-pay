@@ -10,7 +10,7 @@ services:
       deploy_on_push: true
     source_dir: /
     build_command: "cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build"
-    run_command: "cd backend && npx prisma db push --accept-data-loss && node dist/server.js"
+    run_command: "cd backend && npm start"
     envs:
       - key: DATABASE_URL
         scope: RUN_AND_BUILD_TIME
@@ -27,6 +27,9 @@ services:
       - key: INTERSWITCH_ENV
         scope: RUN_AND_BUILD_TIME
         value: "sandbox"
+      - key: CORS_ORIGIN
+        scope: RUN_AND_BUILD_TIME
+        value: ${APP_URL}
       - key: PORT
         scope: RUN_AND_BUILD_TIME
         value: "8080"

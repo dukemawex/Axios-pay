@@ -1,5 +1,9 @@
+
 # Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
+
+# Install OpenSSL (Required by Prisma on Debian/Slim)
+RUN apt-get update -y && apt-get install -y openssl
 
 WORKDIR /app
 
@@ -21,7 +25,10 @@ COPY src ./src
 RUN npm run build
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:20-slim
+
+# Install OpenSSL for the runtime environment
+RUN apt-get update -y && apt-get install -y openssl
 
 WORKDIR /app
 

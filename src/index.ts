@@ -1,7 +1,7 @@
 // this is src/index.ts file
 
 import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import apiRoutes from './routes/api';
 import authRoutes from './routes/auth';
@@ -9,11 +9,33 @@ import authRoutes from './routes/auth';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors({
-    origin: ['https://axios-pay-ss47w.ondigitalocean.app', 'https://axios-pay.vercel.app', 'http://localhost:3000'],
+const allowedOrigins = [
+    'https://axios-pay.vercel.app',
+    'https://axios-pay-ss47w.ondigitalocean.app',
+    'http://localhost:3000',
+    'http://localhost:5173',
+];
+
+const corsOptions: CorsOptions = {
+    origin: (origin, callback) => {
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        const isAllowedOrigin = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+
+        if (isAllowedOrigin) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors());
 app.use(express.json());
 app.use(helmet());
 

@@ -30,11 +30,16 @@ app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({ status: 'OK', service: 'Axios Pay Production Engine' });
 });
 
+app.get('/', (_req: Request, res: Response) => {
+    res.status(200).json({ status: 'OK', message: 'Axios Pay API is running' });
+});
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error('Unhandled Exception:', err);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
 });
 
 app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`PORT=${PORT}`);
     console.log(`🚀 Axios Pay Production Engine started on port ${PORT}`);
 });

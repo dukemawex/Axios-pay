@@ -72,6 +72,14 @@ app.get('/health', (_req: Request, res: Response) => {
 // Serve frontend static files (built by Vite)
 app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
+app.get('/', staticLimiter, (_req: Request, res: Response, next: NextFunction) => {
+    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'), (err) => {
+        if (err) {
+            next(err);
+        }
+    });
+});
+
 // Catch-all: serve index.html for all non-API paths (SPA client-side routing)
 app.get('*', staticLimiter, (_req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
@@ -83,5 +91,6 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`PORT=${PORT}`);
     console.log(`🚀 Axios Pay Production Engine started on port ${PORT}`);
 });

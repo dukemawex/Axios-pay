@@ -19,6 +19,7 @@ const allowedOrigins = [
 const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
         if (!origin) {
+            // Allow non-browser or same-origin requests that may not include Origin.
             return callback(null, true);
         }
 
@@ -26,7 +27,9 @@ const corsOptions: CorsOptions = {
         try {
             const parsedOrigin = new URL(origin);
             isVercelOrigin = parsedOrigin.protocol === 'https:' && parsedOrigin.hostname.endsWith('.vercel.app');
-        } catch (_error) {}
+        } catch (_error) {
+            // Malformed origins are treated as disallowed below.
+        }
 
         const isAllowedOrigin = allowedOrigins.includes(origin) || isVercelOrigin;
 

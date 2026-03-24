@@ -1,6 +1,7 @@
 {
   "_comment": "this is frontend/package.json file",
   "name": "axios-pay-frontend",
+  "description": "Frontend built with React using Vite",
   "private": true,
   "version": "1.0.0",
   "type": "module",

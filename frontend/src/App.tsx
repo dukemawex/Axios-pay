@@ -79,7 +79,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-gray-200 py-4 px-6 text-center text-[10px] uppercase tracking-widest text-gray-400 font-bold">
-        Built by Emmanuel Duke &amp; Fortitude Odunlami for the Enyata × Interswitch Buildathon
+        Emmanuel Duke &amp; Fortitude Odunlami | Enyata × Interswitch Buildathon
       </footer>
     </div>
   );
@@ -127,7 +127,7 @@ function AuthForm({ type, setToken, setUser, setView }: {
       } else {
         setError(data.message || 'Authentication failed');
       }
-    } catch (err) {
+    } catch {
       setError('Connection refused. Verify API routing.');
     } finally {
       setLoading(false);

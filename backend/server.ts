@@ -54,35 +54,21 @@ const apiLimiter = rateLimit({
     message: { success: false, message: 'Too many requests, please try again later.' },
 });
 
-const staticLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 500,
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
 // Register API Routes
 app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api', apiLimiter, apiRoutes);
 
-app.get('/health', (_req: Request, res: Response) => {
+app.get('/api/health', (_req: Request, res: Response) => {
     res.status(200).json({ status: 'OK', service: 'Axios Pay Production Engine' });
 });
 
-// Serve frontend static files (built by Vite)
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+app.use('/api', apiLimiter, apiRoutes);
 
-app.get('/', staticLimiter, (_req: Request, res: Response, next: NextFunction) => {
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'), (err) => {
-        if (err) {
-            next(err);
-        }
-    });
-});
+const distPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(distPath));
 
 // Catch-all: serve index.html for all non-API paths (SPA client-side routing)
-app.get('*', staticLimiter, (_req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+app.get('*', (_req: Request, res: Response) => {
+    res.sendFile(path.join(distPath, 'index.html'));
 });
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

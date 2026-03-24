@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -9,7 +8,10 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    outDir: '../backend/frontend/dist',
+    // 1. Output the build directly into a local 'dist' folder
+    outDir: 'dist', 
+    // 2. Clear the folder before building (fixes the warning)
+    emptyOutDir: true, 
     sourcemap: false,
   }
 });

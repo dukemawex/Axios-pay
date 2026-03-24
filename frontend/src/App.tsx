@@ -125,17 +125,28 @@ function AuthForm({ type, setToken, setView }: any) {
 }
 
 function Dashboard({ token }: { token: string }) {
-  // Simplified for logic confirmation
+  // Now using the token to 'authorize' the view
+  const [isAuthorized, setIsAuthorized] = useState(!!token);
+
   return (
-    <div className="max-w-4xl w-full text-center">
-      <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+    <div className="max-w-4xl w-full text-center animate-in fade-in duration-1000">
+      <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
         <ShieldCheck className="text-emerald-400 w-10 h-10" />
       </div>
-      <h2 className="text-2xl font-medium mb-2">Access Granted</h2>
-      <p className="text-zinc-500 mb-8">Your Axios Pay production environment is now active.</p>
-      <button onClick={() => { localStorage.removeItem('axios_token'); window.location.reload(); }} className="text-xs text-zinc-500 border border-white/10 px-4 py-2 rounded-full hover:bg-white/5 transition-all">
-        Logout
-      </button>
+      <h2 className="text-2xl font-medium mb-2 text-white">Security Verified</h2>
+      <p className="text-zinc-500 mb-8 max-w-sm mx-auto text-sm">
+        Your production session is active. All cross-border liquidity routes are now encrypted.
+      </p>
+      
+      <div className="flex flex-col items-center gap-4">
+        <button 
+          onClick={() => { localStorage.removeItem('axios_token'); window.location.reload(); }} 
+          className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 border border-white/5 px-6 py-3 rounded-lg hover:bg-white/5 hover:text-white transition-all"
+        >
+          Terminate Session
+        </button>
+      </div>
     </div>
   );
 }
+

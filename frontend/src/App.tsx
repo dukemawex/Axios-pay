@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRightLeft, ShieldCheck, Globe, Loader2, ChevronRight } from 'lucide-react';
 
-// Hardcoded for absolute reliability for your demo
-const API_BASE = 'https://axios-pay-ss47w.ondigitalocean.app/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 export default function App() {
   const [view, setView] = useState<'login' | 'register' | 'dashboard'>('login');
@@ -73,6 +72,10 @@ function AuthForm({ type, setToken, setView }: any) {
         body: JSON.stringify(body)
       });
       
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error('Server returned non-JSON response');
+      }
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('axios_token', data.token);
@@ -124,10 +127,7 @@ function AuthForm({ type, setToken, setView }: any) {
   );
 }
 
-function Dashboard({ token }: { token: string }) {
-  // Now using the token to 'authorize' the view
-  const [isAuthorized, setIsAuthorized] = useState(!!token);
-
+function Dashboard({ token: _token }: { token: string }) {
   return (
     <div className="max-w-4xl w-full text-center animate-in fade-in duration-1000">
       <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">

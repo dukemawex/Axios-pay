@@ -1,3 +1,4 @@
+// this is prisma/schema.prisma file
 
 generator client {
   provider      = "prisma-client-js"
@@ -12,6 +13,7 @@ datasource db {
 model User {
   id           String        @id @default(uuid())
   email        String        @unique
+  password     String        // Added for real authentication
   name         String
   wallets      Wallet[]
   transactions Transaction[]
@@ -23,7 +25,7 @@ model Wallet {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  currency  String   @db.VarChar(3) // e.g., NGN, UGX
+  currency  String   @db.VarChar(3)
   balance   Decimal  @default(0.00) @db.Decimal(20, 4)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,7 +55,7 @@ model Transaction {
   currency    String            @db.VarChar(3)
   status      TransactionStatus @default(PENDING)
   reference   String            @unique
-  metadata    Json?             // Stores exchange rates, destination bank, etc.
+  metadata    Json?
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }

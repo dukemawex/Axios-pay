@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRightLeft, ShieldCheck, Globe, Loader2, ChevronRight, Eye, EyeOff, LogOut, Info } from 'lucide-react';
+import { ArrowRightLeft, ShieldCheck, Globe, Loader2, ChevronRight, Eye, EyeOff, LogOut } from 'lucide-react';
 
 const API_BASE = '/api';
 
-type View = 'login' | 'register' | 'dashboard' | 'about';
+type View = 'login' | 'register' | 'dashboard';
 
 export default function App() {
   const [view, setView] = useState<View>('login');
@@ -43,12 +43,6 @@ export default function App() {
           <span className="text-sm font-bold tracking-widest uppercase text-gray-900">Axios Pay</span>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => setView('about')}
-            className="text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-emerald-600 transition-colors flex items-center gap-1"
-          >
-            <Info className="w-3.5 h-3.5" /> About
-          </button>
           {token && (
             <button
               onClick={handleLogout}
@@ -61,9 +55,7 @@ export default function App() {
       </nav>
 
       <main className="flex flex-col items-center justify-center px-6 py-16 min-h-[calc(100vh-3.5rem)]">
-        {view === 'about' ? (
-          <AboutView onBack={() => setView(token ? 'dashboard' : 'login')} />
-        ) : view === 'dashboard' && token && user ? (
+        {view === 'dashboard' && token && user ? (
           <Dashboard token={token} user={user} onLogout={handleLogout} />
         ) : view === 'login' || view === 'register' ? (
           <div className="w-full max-w-[400px]">
@@ -85,6 +77,10 @@ export default function App() {
           </div>
         ) : null}
       </main>
+
+      <footer className="border-t border-gray-200 py-4 px-6 text-center text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+        Built by Emmanuel Duke & Fortitude Odunlami · Enyata × Interswitch Buildathon
+      </footer>
     </div>
   );
 }
@@ -248,69 +244,3 @@ function Dashboard({ token, user, onLogout }: { token: string; user: { id: strin
     </div>
   );
 }
-
-function AboutView({ onBack }: { onBack: () => void }) {
-  return (
-    <div className="max-w-2xl w-full">
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
-            <ArrowRightLeft className="text-white w-5 h-5" strokeWidth={2.5} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">About Axios Pay</h2>
-            <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">NGN/UGX Liquidity Engine</p>
-          </div>
-        </div>
-
-        <div className="space-y-5 text-sm text-gray-600 leading-relaxed">
-          <p>
-            <strong className="text-gray-900">Axios Pay</strong> is a cross-border fintech platform built to solve
-            the liquidity gap between Nigerian Naira (NGN) and Ugandan Shilling (UGX) markets—
-            two of Sub-Saharan Africa's most active trade corridors.
-          </p>
-
-          <div>
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">The Problem</h3>
-            <p>
-              Businesses and individuals moving value between Nigeria and Uganda face high FX spreads,
-              slow settlement times, and opaque pricing from legacy providers. Axios Pay eliminates
-              intermediaries and offers near-instant settlement at transparent rates.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">The Engine</h3>
-            <p>
-              Powered by a dual-wallet ledger system, Axios Pay maintains both NGN and UGX balances
-              per user. Swaps execute atomically via our internal FX engine, with rates anchored to
-              live market data. The platform integrates Interswitch for fiat on/off ramps.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">UNN-Tech Roots</h3>
-            <p>
-              Axios Pay was conceived at the University of Nigeria, Nsukka (UNN) as part of a broader
-              initiative to build world-class financial infrastructure for African markets. The project
-              reflects UNN's tradition of producing engineers who solve real continental problems.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 pt-2 text-[11px] uppercase tracking-widest font-bold text-gray-400">
-            <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3 text-emerald-500" /> PCI-DSS Compliant</span>
-            <span className="flex items-center gap-1.5"><Globe className="w-3 h-3 text-emerald-500" /> 24/7 Liquidity</span>
-          </div>
-        </div>
-
-        <button
-          onClick={onBack}
-          className="mt-6 text-[11px] font-bold uppercase tracking-widest text-gray-500 border border-gray-200 px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          ← Back
-        </button>
-      </div>
-    </div>
-  );
-}
-
